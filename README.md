@@ -10,7 +10,7 @@ If you use these data, please cite:
 
 ```
 Haberlie, A. M., and W. S. Ashley, 2018: A Method for Identifying Midlatitude Mesoscale Convective Systems in Radar Mosaics. 
-Part I: Segmentation and Classification. J. Appl. Meteorol. Clim. Accepted.
+Part I: Segmentation and Classification. J. Appl. Meteorol. Clim. In Press.
 ```
 
 Python 3 required.  I specifically used 3.6 to run the notebooks.
