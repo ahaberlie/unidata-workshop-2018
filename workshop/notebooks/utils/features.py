@@ -1,4 +1,3 @@
-from scipy.misc import imread, imresize
 from skimage.measure import regionprops
 from scipy.spatial import cKDTree
 import numpy as np
@@ -12,23 +11,6 @@ feature_list = ['area', 'convex_area', 'eccentricity',
                 'intense_convection_ratio', 'mean_intensity', 'max_intensity',
                 'intensity_variance', 'major_axis_length', 'minor_axis_length',
                 'solidity', 'filename']
-                
-def special_reshape(img, xs, ys):
-
-    max_dim = np.argmax(img.shape)
-    min_dim = np.argmin(img.shape)
-    
-    diff = int((img.shape[max_dim] - img.shape[min_dim]) / 2)
-
-    if max_dim == 0:
-        pad_arr = ((0,0), (diff,diff))
-    else:
-        pad_arr = ((diff,diff), (0,0))
-
-    im = np.pad(img, pad_arr, mode='constant')
-
-    return imresize(im, (xs, ys))
-
 
 def calc_features(fn=None, props=None, stratiform=4, convection=8, intense=10, 
                   pixel_area=4, pixel_length=2, dbz_compression=5):
@@ -48,13 +30,16 @@ def calc_features(fn=None, props=None, stratiform=4, convection=8, intense=10,
     stratiform_area = np.sum(props.intensity_image >= stratiform) * pixel_area
     
     if stratiform_area > 0 and intense_area > 0:
-        convection_stratiform_ratio = convection_area / stratiform_area
         intense_stratiform_ratio = intense_area / stratiform_area
         intense_convection_ratio = intense_area / convection_area
     else:
-        convection_stratiform_ratio = 0
         intense_stratiform_ratio = 0
         intense_convection_ratio = 0
+    
+    if convection_area > 0:
+        convection_stratiform_ratio = convection_area / stratiform_area
+    else:
+        convection_stratiform_ratio = 0
 
     mcs_probability = 0.0
     tropical_probability = 0.0
